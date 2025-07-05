@@ -1,38 +1,38 @@
 package com.example.library.controller;
 
-import com.example.library.model.request.BookRequest;
-import com.example.library.model.response.BookResponse;
-import com.example.library.service.BookService;
+import com.example.library.model.request.BorrowedBookRequest;
+import com.example.library.model.response.BorrowedBookResponse;
+import com.example.library.service.BorrowedBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/api/borrowed-books")
 @CrossOrigin(origins = "http://localhost:3000")
-public class BookController {
+public class BorrowedBookController {
 
     @Autowired
-    private BookService service;
+    private BorrowedBookService service;
 
     @GetMapping
-    public List<BookResponse> getAll() {
+    public List<BorrowedBookResponse> getAll() {
         return service.getAll();
     }
 
     @GetMapping("/{id}")
-    public BookResponse getById(@PathVariable String id) {
+    public BorrowedBookResponse getById(@PathVariable String id) {
         return service.getById(id);
     }
 
     @PostMapping
-    public BookResponse create(@RequestBody BookRequest request) {
+    public BorrowedBookResponse create(@RequestBody BorrowedBookRequest request) {
         return service.create(request);
     }
 
     @PutMapping("/{id}")
-    public BookResponse update(@PathVariable String id, @RequestBody BookRequest request) {
+    public BorrowedBookResponse update(@PathVariable String id, @RequestBody BorrowedBookRequest request) {
         return service.update(id, request);
     }
 
@@ -41,5 +41,4 @@ public class BookController {
         service.delete(id);
     }
 }
-
 

@@ -1,18 +1,23 @@
 package com.example.library.persistence.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
+
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class BorrowedBook {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     @ManyToOne
     private Book book;
@@ -22,5 +27,9 @@ public class BorrowedBook {
 
     private LocalDate borrowDate;
     private LocalDate returnDate;
-}
 
+    @PrePersist
+    public void generateId() {
+        this.id = java.util.UUID.randomUUID().toString();
+    }
+}
