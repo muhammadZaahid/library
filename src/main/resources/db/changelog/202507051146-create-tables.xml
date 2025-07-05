@@ -1,0 +1,66 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <!-- Author Table -->
+    <changeSet id="1" author="zaahid">
+        <createTable tableName="author">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Book Table -->
+    <changeSet id="2" author="zaahid">
+        <createTable tableName="book">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="varchar(255)" />
+            <column name="category" type="varchar(100)" />
+            <column name="publishing_year" type="int"/>
+            <column name="author_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_book_author"
+                             referencedTableName="author" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Member Table -->
+    <changeSet id="3" author="zaahid">
+        <createTable tableName="member">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="phone" type="varchar(20)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Borrowed Book Table -->
+    <changeSet id="4" author="zaahid">
+        <createTable tableName="borrowed_book">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="book_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_borrowed_book_book"
+                             referencedTableName="book" referencedColumnNames="id"/>
+            </column>
+            <column name="member_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_borrowed_book_member"
+                             referencedTableName="member" referencedColumnNames="id"/>
+            </column>
+            <column name="borrow_date" type="date"/>
+            <column name="return_date" type="date"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
