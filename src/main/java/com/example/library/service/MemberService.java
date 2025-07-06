@@ -11,4 +11,5 @@ public interface MemberService {
     MemberResponse create(MemberRequest request);
     MemberResponse update(String id, MemberRequest request);
     void delete(String id);
+    void bulkDelete(List<String> ids);
 }

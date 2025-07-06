@@ -65,6 +65,14 @@ public class MemberServiceImpl implements MemberService {
         memberRepo.deleteById(UUID.fromString(id));
     }
 
+    public void bulkDelete(List<String> ids) {
+        List<UUID> uuidList = ids.stream()
+                .map(UUID::fromString)
+                .toList();
+
+        memberRepo.deleteAllById(uuidList);
+    }
+
     private MemberResponse toResponse(Member member) {
         MemberResponse response = new MemberResponse();
         response.setId(String.valueOf(member.getId()));

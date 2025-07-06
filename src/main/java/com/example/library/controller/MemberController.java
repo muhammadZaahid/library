@@ -43,5 +43,10 @@ public class MemberController {
     public void delete(@PathVariable String id) {
         service.delete(id);
     }
+
+    @PostMapping("/bulk-delete")
+    public void bulkDelete(@RequestBody List<String> ids) {
+        service.bulkDelete(ids);
+    }
 }
 
