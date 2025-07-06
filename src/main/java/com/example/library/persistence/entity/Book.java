@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
@@ -13,7 +15,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Book {
     @Id
-    private String id;
+    @GeneratedValue
+    private UUID id;
 
     private String title;
     private String category;
@@ -22,8 +25,5 @@ public class Book {
     @ManyToOne
     private Author author;
 
-    @PrePersist
-    public void generateId() {
-        this.id = java.util.UUID.randomUUID().toString();
-    }
+
 }

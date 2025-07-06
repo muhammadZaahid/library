@@ -6,7 +6,7 @@ import com.example.library.model.response.BorrowedBookResponse;
 import java.util.List;
 
 public interface BorrowedBookService {
-    List<BorrowedBookResponse> getAll();
+    List<BorrowedBookResponse> getAll(String inquiry);
     BorrowedBookResponse getById(String id);
     BorrowedBookResponse create(BorrowedBookRequest request);
     BorrowedBookResponse update(String id, BorrowedBookRequest request);

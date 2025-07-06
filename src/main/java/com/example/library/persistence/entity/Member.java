@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
@@ -14,14 +16,11 @@ import lombok.Setter;
 public class Member {
 
     @Id
-    private String id;
+    @GeneratedValue
+    private UUID id;
 
     private String name;
     private String email;
     private String phone;
 
-    @PrePersist
-    public void generateId() {
-        this.id = java.util.UUID.randomUUID().toString();
-    }
 }

@@ -4,11 +4,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
+    <!-- Enable UUID Extension -->
+    <changeSet id="0" author="zaahid">
+        <sql>CREATE EXTENSION IF NOT EXISTS "uuid-ossp";</sql>
+    </changeSet>
+
     <!-- Author Table -->
     <changeSet id="1" author="zaahid">
         <createTable tableName="author">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true"/>
+            <column name="id" type="uuid" defaultValueComputed="uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
@@ -19,13 +24,13 @@
     <!-- Book Table -->
     <changeSet id="2" author="zaahid">
         <createTable tableName="book">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true"/>
+            <column name="id" type="uuid" defaultValueComputed="uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="title" type="varchar(255)" />
             <column name="category" type="varchar(100)" />
             <column name="publishing_year" type="int"/>
-            <column name="author_id" type="bigint">
+            <column name="author_id" type="uuid">
                 <constraints nullable="false" foreignKeyName="fk_book_author"
                              referencedTableName="author" referencedColumnNames="id"/>
             </column>
@@ -35,8 +40,8 @@
     <!-- Member Table -->
     <changeSet id="3" author="zaahid">
         <createTable tableName="member">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true"/>
+            <column name="id" type="uuid" defaultValueComputed="uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)"/>
             <column name="email" type="varchar(255)"/>
@@ -47,14 +52,14 @@
     <!-- Borrowed Book Table -->
     <changeSet id="4" author="zaahid">
         <createTable tableName="borrowed_book">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true"/>
+            <column name="id" type="uuid" defaultValueComputed="uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="book_id" type="bigint">
+            <column name="book_id" type="uuid">
                 <constraints nullable="false" foreignKeyName="fk_borrowed_book_book"
                              referencedTableName="book" referencedColumnNames="id"/>
             </column>
-            <column name="member_id" type="bigint">
+            <column name="member_id" type="uuid">
                 <constraints nullable="false" foreignKeyName="fk_borrowed_book_member"
                              referencedTableName="member" referencedColumnNames="id"/>
             </column>

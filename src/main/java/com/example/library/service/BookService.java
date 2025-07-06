@@ -6,7 +6,7 @@ import com.example.library.model.response.BookResponse;
 import java.util.List;
 
 public interface BookService {
-    List<BookResponse> getAll();
+    List<BookResponse> getAll(String inquiry);
     BookResponse getById(String id);
     BookResponse create(BookRequest request);
     BookResponse update(String id, BookRequest request);

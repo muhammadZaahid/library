@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -14,17 +15,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Author {
+
     @Id
-    private String id;
+    @GeneratedValue
+    private UUID id;
 
     private String name;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
     private List<Book> books;
-
-    @PrePersist
-    public void generateId() {
-        this.id = java.util.UUID.randomUUID().toString();
-    }
 }
 

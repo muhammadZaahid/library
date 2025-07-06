@@ -17,8 +17,8 @@ public class BookController {
     private BookService service;
 
     @GetMapping
-    public List<BookResponse> getAll() {
-        return service.getAll();
+    public List<BookResponse> getAll(@RequestParam(required = false) String inquiry) {
+        return service.getAll(inquiry);
     }
 
     @GetMapping("/{id}")

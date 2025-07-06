@@ -6,7 +6,7 @@ import com.example.library.model.response.MemberResponse;
 import java.util.List;
 
 public interface MemberService {
-    List<MemberResponse> getAll();
+    List<MemberResponse> getAll(String inquiry);
     MemberResponse getById(String id);
     MemberResponse create(MemberRequest request);
     MemberResponse update(String id, MemberRequest request);

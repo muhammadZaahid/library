@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,13 +19,19 @@ public class MemberServiceImpl implements MemberService {
     private MemberRepository memberRepo;
 
     @Override
-    public List<MemberResponse> getAll() {
-        return memberRepo.findAll().stream().map(this::toResponse).collect(Collectors.toList());
+    public List<MemberResponse> getAll(String inquiry) {
+        List<Member> members;
+        if (inquiry != null && !inquiry.trim().isEmpty()) {
+            members = memberRepo.findByNameContainingIgnoreCase(inquiry);
+        }else {
+            members = memberRepo.findAll();
+        }
+        return members.stream().map(this::toResponse).toList();
     }
 
     @Override
     public MemberResponse getById(String id) {
-        return memberRepo.findById(id)
+        return memberRepo.findById(UUID.fromString(id))
                 .map(this::toResponse)
                 .orElseThrow(() -> new RuntimeException("Member not found"));
     }
@@ -42,7 +49,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberResponse update(String id, MemberRequest request) {
-        Member member = memberRepo.findById(id)
+        Member member = memberRepo.findById(UUID.fromString(id))
                 .orElseThrow(() -> new RuntimeException("Member not found"));
 
         member.setName(request.getName());
@@ -55,12 +62,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void delete(String id) {
-        memberRepo.deleteById(id);
+        memberRepo.deleteById(UUID.fromString(id));
     }
 
     private MemberResponse toResponse(Member member) {
         MemberResponse response = new MemberResponse();
-        response.setId(member.getId());
+        response.setId(String.valueOf(member.getId()));
         response.setName(member.getName());
         response.setEmail(member.getEmail());
         response.setPhone(member.getPhone());

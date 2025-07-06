@@ -20,8 +20,8 @@ public class MemberController {
     private MemberService service;
 
     @GetMapping
-    public List<MemberResponse> getAll() {
-        return service.getAll();
+    public List<MemberResponse> getAll(@RequestParam(required = false) String inquiry) {
+        return service.getAll(inquiry);
     }
 
     @GetMapping("/{id}")

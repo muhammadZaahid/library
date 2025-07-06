@@ -17,8 +17,8 @@ public class AuthorController {
     private AuthorService service;
 
     @GetMapping
-    public List<AuthorResponse> getAll() {
-        return service.getAll();
+    public List<AuthorResponse> getAll(@RequestParam(required = false) String inquiry) {
+        return service.getAll(inquiry);
     }
 
     @GetMapping("/{id}")
@@ -39,6 +39,11 @@ public class AuthorController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
         service.delete(id);
+    }
+
+    @PostMapping("/bulk-delete")
+    public void bulkDelete(@RequestBody List<String> ids) {
+        service.bulkDelete(ids);
     }
 }
 

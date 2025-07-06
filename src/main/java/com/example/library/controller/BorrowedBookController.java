@@ -17,8 +17,8 @@ public class BorrowedBookController {
     private BorrowedBookService service;
 
     @GetMapping
-    public List<BorrowedBookResponse> getAll() {
-        return service.getAll();
+    public List<BorrowedBookResponse> getAll(@RequestParam(required = false) String inquiry) {
+        return service.getAll(inquiry);
     }
 
     @GetMapping("/{id}")
