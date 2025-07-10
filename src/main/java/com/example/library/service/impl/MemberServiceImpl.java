@@ -1,11 +1,15 @@
 package com.example.library.service.impl;
 
 import com.example.library.model.request.MemberRequest;
+import com.example.library.model.response.AuthorResponse;
 import com.example.library.model.response.MemberResponse;
+import com.example.library.persistence.entity.Author;
 import com.example.library.persistence.entity.Member;
 import com.example.library.persistence.repository.MemberRepository;
 import com.example.library.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,14 +23,14 @@ public class MemberServiceImpl implements MemberService {
     private MemberRepository memberRepo;
 
     @Override
-    public List<MemberResponse> getAll(String inquiry) {
-        List<Member> members;
+    public Page<MemberResponse> getAll(String inquiry, Pageable pageable) {
+        Page<Member> members;
         if (inquiry != null && !inquiry.trim().isEmpty()) {
-            members = memberRepo.findByNameContainingIgnoreCase(inquiry);
+            members = memberRepo.findByNameContainingIgnoreCase(inquiry, pageable);
         }else {
-            members = memberRepo.findAll();
+            members = memberRepo.findAll(pageable);
         }
-        return members.stream().map(this::toResponse).toList();
+        return members.map(this::toResponse);
     }
 
     @Override

@@ -1,40 +1,39 @@
 package com.example.library.service.impl;
 
 import com.example.library.model.request.BookRequest;
-import com.example.library.model.response.AuthorResponse;
 import com.example.library.model.response.BookResponse;
 import com.example.library.persistence.entity.Author;
 import com.example.library.persistence.entity.Book;
 import com.example.library.persistence.repository.AuthorRepository;
 import com.example.library.persistence.repository.BookRepository;
 import com.example.library.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class BookServiceImpl implements BookService {
 
-    @Autowired
-    private BookRepository bookRepo;
+    private final BookRepository bookRepo;
 
-    @Autowired
-    private AuthorRepository authorRepo;
+    private final AuthorRepository authorRepo;
 
     @Override
-    public List<BookResponse> getAll(String inquiry) {
-        List<Book> books;
+    public Page<BookResponse> getAll(String inquiry, Pageable pageable) {
+        Page<Book> books;
 
         if (inquiry != null && !inquiry.trim().isEmpty()) {
-            books = bookRepo.findByTitleContainingIgnoreCase(inquiry);
+            books = bookRepo.findByTitleContainingIgnoreCase(inquiry, pageable);
         } else {
-            books = bookRepo.findAll();
+            books = bookRepo.findAll(pageable);
         }
 
-        return books.stream().map(this::toResponse).toList();
+        return books.map(this::toResponse);
     }
 
     @Override
@@ -81,6 +80,15 @@ public class BookServiceImpl implements BookService {
     @Override
     public void delete(String id) {
         bookRepo.deleteById(UUID.fromString(id));
+    }
+
+    @Override
+    public void bulkDelete(List<String> ids) {
+        List<UUID> uuidList = ids.stream()
+                .map(UUID::fromString)
+                .toList();
+
+        bookRepo.deleteAllById(uuidList);
     }
 
     private BookResponse toResponse(Book book) {

@@ -1,6 +1,8 @@
 package com.example.library.persistence.repository;
 
 import com.example.library.persistence.entity.BorrowedBook;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +17,6 @@ public interface BorrowedBookRepository extends JpaRepository<BorrowedBook, UUID
                 WHERE LOWER(bb.book.title) LIKE LOWER(CONCAT('%', :inquiry, '%'))
                    OR LOWER(bb.member.name) LIKE LOWER(CONCAT('%', :inquiry, '%'))
             """)
-    List<BorrowedBook> findByBookOrMember(@Param("inquiry") String inquiry);
+    Page<BorrowedBook> findByBookOrMember(@Param("inquiry") String inquiry, Pageable pageable);
 
 }

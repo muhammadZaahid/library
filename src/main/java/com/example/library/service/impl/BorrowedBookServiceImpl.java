@@ -10,6 +10,8 @@ import com.example.library.persistence.repository.BorrowedBookRepository;
 import com.example.library.persistence.repository.MemberRepository;
 import com.example.library.service.BorrowedBookService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,17 +26,15 @@ public class BorrowedBookServiceImpl implements BorrowedBookService {
     private final MemberRepository memberRepo;
 
     @Override
-    public List<BorrowedBookResponse> getAll(String inquiry) {
-        List<BorrowedBook> borrowedBooks;
+    public Page<BorrowedBookResponse> getAll(String inquiry, Pageable pageable) {
+        Page<BorrowedBook> borrowedBooks;
         if (inquiry != null && !inquiry.trim().isEmpty()) {
-            borrowedBooks = borrowedBookRepo.findByBookOrMember(inquiry);
+            borrowedBooks = borrowedBookRepo.findByBookOrMember(inquiry, pageable);
         } else {
-            borrowedBooks = borrowedBookRepo.findAll();
+            borrowedBooks = borrowedBookRepo.findAll(pageable);
         }
 
-        return borrowedBooks.stream()
-                .map(this::toResponse)
-                .toList();
+        return borrowedBooks.map(this::toResponse);
     }
 
     @Override
@@ -83,6 +83,15 @@ public class BorrowedBookServiceImpl implements BorrowedBookService {
     @Override
     public void delete(String id) {
         borrowedBookRepo.deleteById(UUID.fromString(id));
+    }
+
+    @Override
+    public void bulkDelete(List<String> ids) {
+        List<UUID> uuidList = ids.stream()
+                .map(UUID::fromString)
+                .toList();
+
+        borrowedBookRepo.deleteAllById(uuidList);
     }
 
     private BorrowedBookResponse toResponse(BorrowedBook borrowed) {

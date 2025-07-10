@@ -6,6 +6,8 @@ import com.example.library.persistence.entity.Author;
 import com.example.library.persistence.repository.AuthorRepository;
 import com.example.library.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,17 +21,19 @@ public class AuthorServiceImpl implements AuthorService {
     private AuthorRepository repository;
 
     @Override
-    public List<AuthorResponse> getAll(String inquiry) {
-        List<Author> authors;
+    public Page<AuthorResponse> getAll(String inquiry, Pageable pageable) {
+        Page<Author> authors;
 
         if (inquiry != null && !inquiry.trim().isEmpty()) {
-            authors = repository.findByNameContainingIgnoreCase(inquiry);
+            authors = repository.findByNameContainingIgnoreCase(inquiry, pageable);
         } else {
-            authors = repository.findAll();
+            authors = repository.findAll(pageable);
         }
 
-        return authors.stream().map(this::toResponse).toList();
+        return authors.map(this::toResponse);
     }
+
+
 
     @Override
     public AuthorResponse getById(String id) {
@@ -67,10 +71,11 @@ public class AuthorServiceImpl implements AuthorService {
         repository.deleteById(uuid);
     }
 
+    @Override
     public void bulkDelete(List<String> ids) {
         List<UUID> uuidList = ids.stream()
                 .map(UUID::fromString)
-                .collect(Collectors.toList());
+                .toList();
 
         repository.deleteAllById(uuidList);
     }
