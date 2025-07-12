@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface AuthorRepository extends JpaRepository<Author, UUID> {
 
     Page<Author> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    boolean existsByEmail(String email);
 }

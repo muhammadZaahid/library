@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <!-- Add 'email' and 'bio' columns to 'author' table -->
+    <changeSet id="20250712-01-add-columns-author" author="zaahid">
+        <addColumn tableName="author">
+            <column name="email" type="varchar(100)"/>
+            <column name="bio" type="text"/>
+        </addColumn>
+    </changeSet>
+
+    <!-- Add unique constraint on email -->
+    <changeSet id="20250712-02-unique-email-author" author="zaahid">
+        <addUniqueConstraint
+                tableName="author"
+                columnNames="email"
+                constraintName="uq_author"/>
+    </changeSet>
+
+</databaseChangeLog>

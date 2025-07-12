@@ -14,15 +14,28 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(
+        name = "author",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "email")
+        }
+)
 public class Author {
 
     @Id
     @GeneratedValue
     private UUID id;
 
+    @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @Column(unique = true)
+    private String email;
+
+    @Column(columnDefinition = "TEXT")
+    private String bio;
+
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> books;
 }
 

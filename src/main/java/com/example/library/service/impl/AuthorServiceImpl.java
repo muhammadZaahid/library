@@ -1,5 +1,7 @@
 package com.example.library.service.impl;
 
+import com.example.library.helper.FieldErrorDetail;
+import com.example.library.helper.ValidationException;
 import com.example.library.model.request.AuthorRequest;
 import com.example.library.model.response.AuthorResponse;
 import com.example.library.persistence.entity.Author;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -33,8 +36,6 @@ public class AuthorServiceImpl implements AuthorService {
         return authors.map(this::toResponse);
     }
 
-
-
     @Override
     public AuthorResponse getById(String id) {
         UUID uuid = UUID.fromString(id);
@@ -45,8 +46,21 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public AuthorResponse create(AuthorRequest request) {
+        List<FieldErrorDetail> errors = new ArrayList<>();
+
+        if (repository.existsByEmail(request.getEmail())) {
+            errors.add(new FieldErrorDetail("email", "Email is already used by another author"));
+        }
+
+        if (!errors.isEmpty()) {
+            throw new ValidationException(errors);
+        }
+
         Author author = new Author();
         author.setName(request.getName());
+        author.setEmail(request.getEmail());
+        author.setBio(request.getBio());
+
         repository.save(author);
         return toResponse(author);
     }
@@ -59,11 +73,13 @@ public class AuthorServiceImpl implements AuthorService {
                 .orElseThrow(() -> new RuntimeException("Author not found"));
 
         author.setName(request.getName());
+        author.setEmail(request.getEmail());
+        author.setBio(request.getBio());
+
         repository.save(author);
 
         return toResponse(author);
     }
-
 
     @Override
     public void delete(String id) {
@@ -80,11 +96,13 @@ public class AuthorServiceImpl implements AuthorService {
         repository.deleteAllById(uuidList);
     }
 
-
     private AuthorResponse toResponse(Author author) {
         AuthorResponse response = new AuthorResponse();
-        response.setId(author.getId().toString());
+        response.setId(author.getId());
         response.setName(author.getName());
+        response.setEmail(author.getEmail());
+        response.setBio(author.getBio());
         return response;
     }
 }
+
