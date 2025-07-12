@@ -1,4 +1,4 @@
-package com.example.library.helper;
+package com.example.library.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

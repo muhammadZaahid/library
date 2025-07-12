@@ -1,7 +1,7 @@
 package com.example.library.service.impl;
 
-import com.example.library.helper.FieldErrorDetail;
-import com.example.library.helper.ValidationException;
+import com.example.library.exception.FieldErrorDetail;
+import com.example.library.exception.ValidationException;
 import com.example.library.model.request.AuthorRequest;
 import com.example.library.model.response.AuthorResponse;
 import com.example.library.persistence.entity.Author;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
